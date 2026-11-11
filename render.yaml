@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: trading-backtester
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn trading.api:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health/ready
+    envVars:
+      - key: BACKTEST_DB
+        value: /tmp/backtests.sqlite3
+      - key: BACKTEST_WORKERS
+        value: "1"
+      - key: MAX_PENDING_JOBS
+        value: "100"

@@ -31,6 +31,7 @@ trading-backtester/
 ├── tests/
 │   └── test_engine.py
 ├── Dockerfile
+├── render.yaml
 ├── requirements.txt
 └── README.md
 ```
@@ -102,6 +103,28 @@ docker run --rm -p 8000:8000 -v backtest-data:/data trading-backtester
 ```
 
 The container runs as a non-root user and persists job state under `/data`.
+
+## Free deployment on Render
+
+The repository includes a Render Blueprint in `render.yaml`. To create the
+service without installing a cloud CLI:
+
+1. Sign in to [Render](https://dashboard.render.com/).
+2. Select **New + → Blueprint** and connect the
+   `HarshitGaur08/trading-backtester` GitHub repository.
+3. Review the `trading-backtester` service, confirm the **Free** plan, and
+   create the service.
+4. After the first deploy, open the service URL and check `/health/ready` or
+   `/docs`.
+
+The free web service sleeps after inactivity and can take time to wake up. Its
+filesystem is ephemeral; this configuration stores SQLite data under `/tmp`,
+so jobs, results, and queued work can disappear when the service sleeps,
+restarts, or redeploys. Use this deployment for demonstrations with
+non-sensitive data, not durable workloads. Render's free-plan quotas and
+availability can change; check its current
+[free-instance limits](https://render.com/docs/free) before deploying. Staying
+within free limits is required to avoid charges.
 
 ## Performance and benchmarking
 
